@@ -41,6 +41,17 @@ app.get('/webhook',function(request,response){
 	}
 });
 
+app.get('/testopen',function(request,response){
+	var recievedToken = request.query['hub.verify_token'];
+	console.log(request.query);
+	if(recievedToken === '010991'){
+		console.log("Request verified sending response");
+		response.send(request.query['hub.challenge']);
+	}else{
+		console.log("Request failed");
+	}
+});
+
 // handler receiving messages
 app.post('/webhook', function (req, res) {
 	var events = req.body.entry[0].messaging;
