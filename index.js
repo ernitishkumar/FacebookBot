@@ -80,7 +80,7 @@ function getMeaning(recipientId, word){
 			url: END_SITE+word,
 			method: 'GET',
 		}, function(error, response, body) {
-			var status = response.status;
+			var status = response.statusCode;
 			console.log("Recieved Response for searched word is: ");
 			console.log(response);
 				if(status === 200){
