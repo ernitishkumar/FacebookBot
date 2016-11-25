@@ -81,10 +81,9 @@ function getMeaning(recipientId, word){
 			method: 'GET',
 		}, function(error, response, body) {
 			var status = response.statusCode;
-			console.log("Recieved Response for searched word is: ");
-			console.log(response);
+
 				if(status === 200){
-				var result = body.tuc[0].meanings;
+				var result = response.body.tuc[0].meanings;
 				console.log("Sending meaning as : "+JSON.stringify(result));
 				sendMessage(recipientId, {text:JSON.stringify(result)});
 				}else if (error) {
