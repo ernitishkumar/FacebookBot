@@ -80,6 +80,7 @@ function getMeaning(recipientId, word){
 			url: END_SITE+word,
 			method: 'GET',
 		}, function(error, response, body) {
+
 			var status = response.statusCode;
 
 				if(status === 200){
@@ -90,7 +91,7 @@ function getMeaning(recipientId, word){
 				var meanings = jsonBody.tuc[0].meanings;
 				var result ='';
 				meanings.forEach(function(meaning, index, array) {
-  				 result = result + (index+1)+" "+meaning.text+"\\";
+  				 result = result + (index+1)+" "+meaning.text+"";
         });
 				result = JSON.stringify(result);
 				console.log("Sending meaning as : "+result);
