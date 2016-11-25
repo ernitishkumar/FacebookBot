@@ -64,6 +64,44 @@ app.post('/webhook', function (req, res) {
 	res.sendStatus(200);
 });
 
+// Api site to get the meaning of the word by hitting it
+const END_SITE = 'https://glosbe.com/gapi/translate?from=eng&dest=eng&format=json&phrase=';
+
+//Creating RegEx object for word matching
+var regEx = new RegExp("^[a-zA-Z]+$");
+
+function getMeaning(recipientId, word){
+	console.log("Getting meaning for word: "+word);
+	word = word.trim();
+	if(regEx.test(word)){
+		console.log("Word is correct,fetching meaning of: "+word+" for senderId : "+recipientId);
+		requestModule(
+		{
+			url: END_SITE+word,
+			method: 'GET',
+		}, function(error, response, body) {
+			var status = response.status;
+			console.log("Recieved Response for searched word is: ");
+			console.log(response);
+				if(status === 200){
+				var result = body.tuc[0].meanings;
+				console.log("Sending meaning as : "+JSON.stringify(result));
+				sendMessage(recipientId, {text:JSON.stringify(result)});
+				}else if (error) {
+				console.log('Error getting meaning: ', error);
+				} else if (response.body.error) {
+				console.log('Error : ', response.body.error);
+				}
+			}
+		);
+	}else{
+		var errorMessage = {
+			text : "Unable to get the meaning for "+word+", Please try Again with a new word!"
+		};
+		sendMessage(recipientId,errorMessage);
+	}
+}
+
 // generic function sending messages
 function sendMessage(recipientId, message) {
 	requestModule({
@@ -82,39 +120,3 @@ function sendMessage(recipientId, message) {
 		}
 	});
 };
-
-// Api site to get the meaning of the word by hitting it
-const END_SITE = 'https://glosbe.com/gapi/translate?from=eng&dest=eng&format=json&phrase=';
-
-//Creating RegEx object for word matching
-var regEx = new RegExp("^[a-zA-Z]+$");
-
-function getMeaning(recipientId, word){
-	word = word.trim();
-	if(regEx.test(word)){
-		console.log("Getting meaning for word : "+word+" senderId : "+recipientId);
-		requestModule(
-		{
-			url: END_SITE+word,
-			method: 'GET',
-		}, function(error, response, body) {
-			var status = response.status;
-			console.log(status);
-				if(status === 200){
-				var result = body.tuc[0].meanings;
-				console.log("Sending meanin as : "+JSON.stringify(result));
-				sendMessage(recipientId, {text:JSON.stringify(result)});
-				}else if (error) {
-				console.log('Error getting meaning: ', error);
-				} else if (response.body.error) {
-				console.log('Error : ', response.body.error);
-				}
-			}
-		);
-	}else{
-		var errorMessage = {
-			text : "Unable to get the meaning for "+word+", Please try Again with a new word!"
-		};
-		sendMessage(recipientId,errorMessage);
-	}
-}
