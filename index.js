@@ -85,11 +85,16 @@ function getMeaning(recipientId, word){
 				if(status === 200){
 
 				var jsonBody = JSON.parse(response.body);
-				console.log("parsed json object");
-				console.log(jsonBody);
+			//	console.log("parsed json object");
+			//	console.log(jsonBody);
 				var result = jsonBody.tuc[0].meanings;
-				console.log("Sending meaning as : "+JSON.stringify(result));
-				sendMessage(recipientId, {text:JSON.stringify(result)});
+				result = JSON.stringify(result);
+				console.log("Sending meaning as : "+result);
+				if(result.length > 320 ){
+					console.log("substringing result since length is > 320");
+					result = result.substring(0,320);
+				}
+				sendMessage(recipientId, {text:result});
 				}else if (error) {
 				console.log('Error getting meaning: ', error);
 				} else if (response.body.error) {
