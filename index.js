@@ -88,11 +88,10 @@ function getMeaning(recipientId, word){
 			//	console.log("parsed json object");
 			//	console.log(jsonBody);
 				var meanings = jsonBody.tuc[0].meanings;
-				var i = 1;
 				var result ='';
-				for(var meaning : meanings){
-					result = i+" "+meaning.text+"\n";
-				}
+				meanings.forEach(function(meaning, index, array) {
+  				 result = result + (index+1)+" "+meaning.text+"\n";
+        });
 				result = JSON.stringify(result);
 				console.log("Sending meaning as : "+result);
 				if(result.length > 320 ){
