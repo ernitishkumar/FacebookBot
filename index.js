@@ -83,7 +83,7 @@ function getMeaning(recipientId, word){
 			var status = response.statusCode;
 
 				if(status === 200){
-				console.log(response.body);
+				console.log(response.body.tuc);
 				var result = response.body.tuc[0].meanings;
 				console.log("Sending meaning as : "+JSON.stringify(result));
 				sendMessage(recipientId, {text:JSON.stringify(result)});
