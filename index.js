@@ -90,7 +90,7 @@ function getMeaning(recipientId, word){
 				var meanings = jsonBody.tuc[0].meanings;
 				var result ='';
 				meanings.forEach(function(meaning, index, array) {
-  				 result = result + (index+1)+" "+meaning.text+"\n";
+  				 result = result + (index+1)+" "+meaning.text+"\\";
         });
 				result = JSON.stringify(result);
 				console.log("Sending meaning as : "+result);
