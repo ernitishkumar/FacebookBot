@@ -7,10 +7,10 @@ var requestModule = require("request");
 
 var app = express();
 
-// parse application/x-www-form-urlencoded 
+// parse application/x-www-form-urlencoded
 app.use(bodyParser.urlencoded({ extended: false }));
 
-// parse application/json 
+// parse application/json
 app.use(bodyParser.json());
 
 app.set('port', (process.env.PORT || 5000));
@@ -48,7 +48,7 @@ app.get('/testopen',function(request,response){
 		console.log("Request verified sending response");
 		response.send(request.query['hub.challenge']);
 	}else{
-		console.log("Request failed");
+		console.log("Request failed, passed token is: "+recievedToken);
 	}
 });
 
@@ -58,7 +58,7 @@ app.post('/webhook', function (req, res) {
 	for (var i = 0; i < events.length; i++) {
 		var event = events[i];
 		if(event.message && event.message.text){
-			getMeaning(event.sender.id,event.message.text);	
+			getMeaning(event.sender.id,event.message.text);
 		}
 	}
 	res.sendStatus(200);
@@ -83,7 +83,7 @@ function sendMessage(recipientId, message) {
 	});
 };
 
-// Api site to get the meaning of the word
+// Api site to get the meaning of the word by hitting it
 const END_SITE = 'https://glosbe.com/gapi/translate?from=eng&dest=eng&format=json&phrase=';
 
 //Creating RegEx object for word matching
@@ -112,7 +112,7 @@ function getMeaning(recipientId, word){
 			}
 		);
 	}else{
-		var errorMessage = { 
+		var errorMessage = {
 			text : "Unable to get the meaning for "+word+", Please try Again with a new word!"
 		};
 		sendMessage(recipientId,errorMessage);
