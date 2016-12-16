@@ -1,6 +1,14 @@
 'use strict'
 var bodyParser = require('body-parser');
 
+var fs = require('fs');
+var http = require('http');
+var https = require('https');
+var privateKey  = fs.readFileSync('nitish/eas/domain-key.txt', 'utf8');
+var certificate = fs.readFileSync('nitish/eas/domain-crt.txt', 'utf8');
+
+var credentials = {key: privateKey, cert: certificate};
+
 var express = require('express');
 
 var requestModule = require("request");
@@ -25,10 +33,14 @@ app.get('/', function(request, response) {
 	response.render('pages/index');
 });
 
+/*
 app.listen(app.get('port'), function() {
 	console.log('Node app is running on port', app.get('port'));
 });
+*/
 
+var httpServer = http.createServer(app);
+var httpsServer = https.createServer(credentials, app);
 
 app.get('/webhook',function(request,response){
 	var recievedToken = request.query['hub.verify_token'];
@@ -64,6 +76,11 @@ app.post('/webhook', function (req, res) {
 	res.sendStatus(200);
 });
 
+//httpServer.listen(5555);
+httpsServer.listen(8444,function(){
+	console.log("HTTPS Server started listening at: 8444 port");
+});
+
 // Api site to get the meaning of the word by hitting it
 const END_SITE = 'https://glosbe.com/gapi/translate?from=eng&dest=eng&format=json&phrase=';
 
@@ -91,7 +108,7 @@ function getMeaning(recipientId, word){
 				var meanings = jsonBody.tuc[0].meanings;
 				var result ='';
 				meanings.forEach(function(meaning, index, array) {
-  				 result = result + (index+1)+" "+meaning.text+"";
+  				 result = result + (index+1)+" "+meaning.text+"\\";
         });
 				result = JSON.stringify(result);
 				console.log("Sending meaning as : "+result);
