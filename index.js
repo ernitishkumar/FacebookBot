@@ -132,11 +132,13 @@ function getMeaning(recipientId, word){
 	}
 }
 
+const PAGE_ACCESS_TOKEN = "EAAH8TXJWQI4BABbrwd3GKWG8QUIqN9FOxJwlyo4BOATIH6raWu2Bvjhk8cHeujmq1xt3gPvXWyWxD8J3ZAPpG2YPsFNjDEwQTRTasQMIMJIZAyZCplDM2oaBUJLorx1DAPzA8TAwBvZC24CdQXu5WvXrCX2rCcxNjpr2qml2SwZDZD";
+
 // generic function sending messages
 function sendMessage(recipientId, message) {
 	requestModule({
 		url: 'https://graph.facebook.com/v2.6/me/messages',
-		qs: {access_token: process.env.PAGE_ACCESS_TOKEN},
+		qs: {access_token: PAGE_ACCESS_TOKEN},
 		method: 'POST',
 		json: {
 			recipient: {id: recipientId},
